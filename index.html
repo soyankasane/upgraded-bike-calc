@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bikeable Kenya — Bike Fit Quick</title>
+  <meta name="description" content="Bikeable Kenya's instant bike fit calculator. Estimate your bike fit from height only or add more measurements for accuracy." />
+  <meta property="og:title" content="Bikeable Kenya — Bike Fit Quick" />
+  <meta property="og:description" content="Instant bike fit starting points by Bikeable Kenya. Works with height only, add inseam/torso/arm/shoulder for better accuracy." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white text-gray-800">
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-blue-600">Bikeable Kenya</h1>
+        <p class="text-gray-600 mt-1">This offline calculator is owned and operated by <strong>Bikeable Kenya</strong>.</p>
+      </div>
+      <div class="no-print flex items-center gap-2">
+        <button id="copyLink" class="rounded-xl border border-gray-200 px-3 py-2">Copy share link</button>
+        <a id="whatsAppShare" target="_blank" rel="noopener" class="rounded-xl px-3 py-2 bg-blue-600 text-white">Share on WhatsApp</a>
+      </div>
+    </header>
+
+    <!-- How to measure -->
+    <section class="mb-6 bg-white shadow rounded-2xl p-4">
+      <h2 class="font-bold mb-2">How to Measure</h2>
+      <p class="text-sm text-gray-600 mb-2">Watch this short guide: <a href="https://www.youtube.com/watch?v=UQtD5L0cA1Q" target="_blank" class="text-blue-600 underline">Bike Fit Measurements Explained</a></p>
+      <div class="grid md:grid-cols-4 gap-4 text-sm">
+        <div class="border rounded-lg p-2">
+          <strong>Inseam</strong>
+          <svg viewBox="0 0 120 140" class="w-full h-24">
+            <rect x="50" y="20" width="20" height="80" fill="#e5e7eb"></rect>
+            <line x1="60" y1="100" x2="60" y2="130" stroke="#111827" stroke-width="2"></line>
+            <text x="5" y="125" font-size="10">Floor</text>
+          </svg>
+        </div>
+        <div class="border rounded-lg p-2">
+          <strong>Torso</strong>
+          <svg viewBox="0 0 120 140" class="w-full h-24">
+            <rect x="50" y="40" width="20" height="60" fill="#e5e7eb"></rect>
+            <line x1="60" y1="40" x2="60" y2="100" stroke="#111827" stroke-width="2"></line>
+          </svg>
+        </div>
+        <div class="border rounded-lg p-2">
+          <strong>Arm</strong>
+          <svg viewBox="0 0 140 140" class="w-full h-24">
+            <line x1="30" y1="70" x2="110" y2="70" stroke="#111827" stroke-width="4"></line>
+          </svg>
+        </div>
+        <div class="border rounded-lg p-2">
+          <strong>Shoulder Width</strong>
+          <svg viewBox="0 0 140 140" class="w-full h-24">
+            <circle cx="40" cy="70" r="6" fill="#111827"></circle>
+            <circle cx="100" cy="70" r="6" fill="#111827"></circle>
+            <line x1="40" y1="70" x2="100" y2="70" stroke="#111827" stroke-width="2"></line>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manual formulas -->
+    <section class="mb-6 bg-white shadow rounded-2xl p-4">
+      <h2 class="font-bold mb-2">Formulas Used</h2>
+      <ul class="list-disc list-inside text-sm text-gray-700">
+        <li><strong>Estimate inseam</strong> ≈ 45% × Height</li>
+        <li><strong>Frame size</strong> ≈ 0.67 × Inseam</li>
+        <li><strong>Saddle height</strong> ≈ 0.883 × Inseam</li>
+        <li><strong>Handlebar width</strong> ≈ Shoulder width (or 40–44 cm by height)</li>
+      </ul>
+    </section>
+
+    <!-- Calculator -->
+    <section class="bg-white shadow rounded-2xl p-6">
+      <h2 class="font-bold mb-4">Bike Fit Calculator</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Inputs -->
+        <div>
+          <label class="block text-sm font-semibold mb-1">Rider height (cm)</label>
+          <input id="height" type="number" placeholder="e.g. 178" class="w-full border rounded-xl px-3 py-2" />
+          <label class="block text-sm font-semibold mt-3 mb-1">Inseam (optional, cm)</label>
+          <input id="inseam" type="number" placeholder="e.g. 83" class="w-full border rounded-xl px-3 py-2" />
+          <label class="block text-sm font-semibold mt-3 mb-1">Shoulder width (optional, cm)</label>
+          <input id="shoulder" type="number" placeholder="e.g. 40" class="w-full border rounded-xl px-3 py-2" />
+          <button id="calc" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-xl">Calculate fit</button>
+          <p id="msg" class="text-sm text-gray-600 mt-2"></p>
+        </div>
+
+        <!-- Results -->
+        <div>
+          <h3 class="font-semibold mb-2">Your Bike Fit (approximate)</h3>
+          <p class="text-xs text-gray-500 mb-4">Results are estimates. Provide more measurements for higher accuracy.</p>
+          <div class="space-y-3 text-sm">
+            <div><strong>Frame size:</strong> <span id="frameSize">—</span></div>
+            <div><strong>Saddle height:</strong> <span id="saddleHeight">—</span></div>
+            <div><strong>Handlebar width:</strong> <span id="barWidth">—</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-8 text-center text-xs text-gray-500">© <span id="year"></span> Bikeable Kenya — All rights reserved.</footer>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function estimateInseam(h) { return 0.45 * h; }
+    function frameFromInseam(i) { return 0.67 * i; }
+    function saddleFromInseam(i) { return 0.883 * i; }
+    function barWidth(h, s) {
+      if (s) return s + ' cm';
+      if (h < 170) return '40 cm';
+      if (h < 185) return '42 cm';
+      return '44 cm';
+    }
+
+    function calculate() {
+      const h = Number($("height").value);
+      if (!h) { $("msg").textContent = "Enter your height."; return; }
+      let i = Number($("inseam").value);
+      let usedEstimate = false;
+      if (!i) { i = estimateInseam(h); usedEstimate = true; }
+      const frame = Math.round(frameFromInseam(i));
+      const saddle = saddleFromInseam(i).toFixed(1);
+      const bar = barWidth(h, Number($("shoulder").value));
+      $("frameSize").textContent = frame + ' cm';
+      $("saddleHeight").textContent = saddle + ' cm';
+      $("barWidth").textContent = bar;
+      $("msg").textContent = usedEstimate ? "* Inseam was estimated as 45% of height." : "";
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      $("calc").addEventListener("click", calculate);
+      document.getElementById("year").textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
